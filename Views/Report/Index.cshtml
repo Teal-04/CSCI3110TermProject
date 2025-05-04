@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Monthly Report";
+    var userId = ViewBag.UserId as int?;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5>Select Month:</h5>
+        <input type="month" id="report-month" class="form-control form-control-sm" />
+    </div>
+</div>
+
+<ul id="report-list" class="list-group mb-4"></ul>
+
+@section Scripts {
+    <script>
+        // when month changes or on load, fetch the report
+        const userIdVal = @userId;
+        const monthInput = document.getElementById('report-month');
+        monthInput.value = new Date().toISOString().slice(0,7);
+
+        async function refreshReport() {
+          const [year, month] = monthInput.value.split('-');
+          await loadReport(userIdVal, parseInt(year), parseInt(month));
+        }
+
+        monthInput.addEventListener('change', refreshReport);
+        document.addEventListener('DOMContentLoaded', refreshReport);
+    </script>
+    <script src="~/js/report.js"></script>
+}

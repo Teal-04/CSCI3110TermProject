@@ -1,0 +1,24 @@
+﻿@model CSCI3110_Term_Project.Models.Budget
+
+@{
+    ViewData["Title"] = "Delete Budget";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Are you sure you want to delete this budget?</h4>
+<div class="border p-3 mb-3">
+    <dl class="row">
+        <dt class="col-sm-2">Category</dt>
+        <dd class="col-sm-10">@Model.Category?.Name</dd>
+
+        <dt class="col-sm-2">Amount</dt>
+        <dd class="col-sm-10">@Model.Amount.ToString("C")</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete" asp-route-id="@Model.BudgetId" method="post">
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

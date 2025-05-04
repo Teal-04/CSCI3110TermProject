@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "One Stop Finances";
+    var userId = ViewBag.UserId as int?;
+}
+
+<div class="d-flex flex-column align-items-center justify-content-center vh-100">
+    <!-- Logo + Slogan -->
+    <img src="~/images/OneStopFinancesLogo.png"
+         alt="One Stop Finances"
+         class="img-fluid rounded-circle shadow mb-4"
+         style="width:40%; max-width:300px;" />
+
+    <h1 class="display-4 text-center">One Stop Finances</h1>
+    <p class="lead text-center mb-5">
+        Keep track of all your spending and create unique budgets!
+    </p>
+
+    <!-- Call-to-Action Buttons -->
+    <div class="mb-5">
+        <a asp-controller="Transaction" asp-action="Index"
+           class="btn btn-primary btn-lg mx-2">View Transactions</a>
+        <a asp-controller="Budget" asp-action="Index"
+           class="btn btn-outline-primary btn-lg mx-2">View Budgets</a>
+        <a asp-controller="Report" asp-action="Index"
+           class="btn btn-secondary btn-lg mx-2">View Reports</a>
+    </div>
+
+@section Scripts {
+    <script src="~/js/report.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+          const now = new Date();
+          // call the same loadReport in report.js, but grab only totals
+          const resp = await fetch(
+            `/api/ReportsApi?userId=${userId}&year=${now.getFullYear()}&month=${now.getMonth()+1}`
+          );
+          const { totalIncome, totalExpense } = await resp.json();
+          const ul = document.getElementById('home-summary');
+          ul.innerHTML = `
+            <li><strong>Income:</strong> $${totalIncome}</li>
+            <li><strong>Expense:</strong> $${totalExpense}</li>
+          `;
+        });
+    </script>
+}
